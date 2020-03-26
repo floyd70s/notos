@@ -19,6 +19,8 @@ function pruebas(req, res) {
  * @description: funcion de registro de usuarios 
  */
 function saveUser(req, res) {
+
+    console.log('inicio de registro de usuario')
     var user = new User()
     var params = req.body
     let now = new Date();
@@ -26,12 +28,14 @@ function saveUser(req, res) {
     user.name = params.name
     user.rut=params.rut
     user.email = params.email
-    user.role = ''
+    user.role = params.role
     user.phone=params.phone
-    user.bank_account=params.bank_account
+    user.account_type=params.account_type
     user.bank=params.bank
+    user.bank_account=params.bank_account
     user.date = now
-    
+    user.status='active'
+
     if (params.password) {
         //encriptar contraseña
         bcrypt.hash(params.password, null, null, function (err, hash) {
@@ -41,10 +45,14 @@ function saveUser(req, res) {
             console.log(user.name)
             console.log(user.rut)
             console.log(user.email)
+            console.log(user.role)
             console.log(user.phone)
             console.log(user.bank_account)
             console.log(user.bank)
-
+            console.log(user.password)
+            console.log(user.date)
+            console.log(user.status)
+            
             if (user.name != null &&
                 user.rut != null &&
                 user.email != null &&
@@ -56,7 +64,7 @@ function saveUser(req, res) {
                 //guardar usuario
                 user.save((err, userStored) => {
                     if (err) {
-                        res.status(500).send({ message: 'Error al guardar el usuario' })
+                        res.status(500).send({ message: err.message })
                     } else {
                         if (!userStored) {
                             res.status(404).send({ message: 'No se ha registrado el usuario' })
@@ -190,11 +198,32 @@ function getImageFile(req, res) {
     })
 }
 
+
+function getUserbyRut(req,res){
+    var rut=req.params.rut
+    console.log('busqueda de usuario por rut: '+ rut )
+
+    User.find({'rut':rut},(err,user)=>{
+        if (err) {
+            res.status(500).send({ message: err})
+        } else {
+            if (!User) {
+                res.status(400).send({ message: 'el usuario no existe' })
+            } else {
+                res.status(200).send({ user })
+            }
+        }
+    })
+}
+
+
+
 module.exports = {
     pruebas,
     saveUser,
     loginUser,
     updateUser,
     uploadImage,
-    getImageFile
+    getImageFile,
+    getUserbyRut
 }

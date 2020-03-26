@@ -29,7 +29,7 @@
     "moment": "^2.24.0",
     "mongo": "^0.1.0",
     "mongodb": "^3.5.2",
-    "mongoose": "^5.8.11",
+    "mongoose": "^5.9.6",
     "mongoose-pagination": "^1.0.0",
     "nodemon": "^2.0.2",
     "operations": "^0.1.2",

@@ -6,12 +6,14 @@ var UserSchema= Schema({
     name:String,
     rut:String,
     email:String,
-    password:String,
     role:String,
     phone:Number,
-    bank_account:Number,
+    account_type:String,
     bank:String,
-    date:Date
+    bank_account:Number,
+    password:String,
+    status:String,
+    date:Date 
 })
 
 module.exports= mongoose.model('User',UserSchema)
