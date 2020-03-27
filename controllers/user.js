@@ -216,6 +216,23 @@ function getUserbyRut(req,res){
     })
 }
 
+function getUsers(req,res){
+    var rut=req.params.rut
+    console.log('busqueda de usuario por rut: '+ rut )
+
+    User.find({},(err,user)=>{
+        if (err) {
+            res.status(500).send({ message: err})
+        } else {
+            if (!User) {
+                res.status(400).send({ message: 'el usuario no existe' })
+            } else {
+                res.status(200).send({ user })
+            }
+        }
+    })
+}
+
 
 
 module.exports = {
@@ -225,5 +242,6 @@ module.exports = {
     updateUser,
     uploadImage,
     getImageFile,
-    getUserbyRut
+    getUserbyRut,
+    getUsers
 }
