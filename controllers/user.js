@@ -26,15 +26,15 @@ function saveUser(req, res) {
     let now = new Date();
 
     user.name = params.name
-    user.rut=params.rut
+    user.rut = params.rut
     user.email = params.email
     user.role = params.role
-    user.phone=params.phone
-    user.account_type=params.account_type
-    user.bank=params.bank
-    user.bank_account=params.bank_account
+    user.phone = params.phone
+    user.account_type = params.account_type
+    user.bank = params.bank
+    user.bank_account = params.bank_account
     user.date = now
-    user.status='active'
+    user.status = 'active'
 
     if (params.password) {
         //encriptar contraseña
@@ -52,7 +52,7 @@ function saveUser(req, res) {
             console.log(user.password)
             console.log(user.date)
             console.log(user.status)
-            
+
             if (user.name != null &&
                 user.rut != null &&
                 user.email != null &&
@@ -106,7 +106,7 @@ function loginUser(req, res) {
                 //comprobar contraseña
                 bcrypt.compare(password, user.password, function (err, check) {
                     if (check) {
-                        //devolver datos usuario 
+                        //devolver datos usuario si viene el hash
                         if (params.gethash) {
                             //devolver token
                             res.status(200).send({
@@ -199,13 +199,13 @@ function getImageFile(req, res) {
 }
 
 
-function getUserbyRut(req,res){
-    var rut=req.params.rut
-    console.log('busqueda de usuario por rut: '+ rut )
+function getUsers(req, res) {
+    var rut = req.params.rut
+    console.log('busqueda de usuario por rut: ' + rut)
 
-    User.find({'rut':rut},(err,user)=>{
+    User.find({}, (err, user) => {
         if (err) {
-            res.status(500).send({ message: err})
+            res.status(500).send({ message: err })
         } else {
             if (!User) {
                 res.status(400).send({ message: 'el usuario no existe' })
@@ -215,20 +215,58 @@ function getUserbyRut(req,res){
         }
     })
 }
+/**
+ * @author CPerez
+ * @param {*} req 
+ * @param {*} res 
+ * @description funcion de ingreso de usuarios.
+ */
+function getUserByRut(req, res) {
+    var params = req.body
+    var email = params.email
+    var password = params.password
+    var rut = params.rut
 
-function getUsers(req,res){
-    var rut=req.params.rut
-    console.log('busqueda de usuario por rut: '+ rut )
+    console.log('email:' + email)
+    console.log('password:' + password)
+    console.log('rut:' + rut)
 
-    User.find({},(err,user)=>{
+    User.findOne({ rut: rut.trim() }, (err, user) => {
         if (err) {
-            res.status(500).send({ message: err})
+            res.status(500).send({ message: 'Error en la peticion' })
         } else {
-            if (!User) {
-                res.status(400).send({ message: 'el usuario no existe' })
+            if (!user) {
+                res.status(404).send({ message: 'El rut no Existe' })
             } else {
-                res.status(200).send({ user })
-            }
+                //comprobar usuario:
+                console.log('user.mail:'+user.email)
+                if (user.email == email) {
+                    //si el email es correcto
+                    //comprobar contraseña
+                    console.log('email validado')
+                    bcrypt.compare(password, user.password, function (err, check) {
+                        if (check) {
+                            //devolver datos usuario 
+                            //console.log(params.gethash)
+                            if (params.gethash) {
+                                //devolver token
+                                console.log('crea token')
+                                res.status(200).send({token: jwt.createToken(user)})
+                            } else {
+                                console.log('devuelve usuario')
+                                res.status(200).send({ user })
+                            }
+                        } else {
+                            console.log('usuario no existe')
+                            res.status(404).send({ message: 'Usuario o Contraseña incorrecta.' })
+                        }
+                    })
+
+                }
+                else {
+                    res.status(404).send({ message: 'El correo no Existe' })
+                }
+            }//fin de que el rut existe
         }
     })
 }
@@ -242,6 +280,6 @@ module.exports = {
     updateUser,
     uploadImage,
     getImageFile,
-    getUserbyRut,
+    getUserByRut,
     getUsers
 }
