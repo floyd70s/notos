@@ -223,15 +223,17 @@ function getUsers(req, res) {
  */
 function getUserByRut(req, res) {
     var params = req.body
+    var rut = params.rut
     var email = params.email
     var password = params.password
-    var rut = params.rut
 
+    console.log('-------------------')
+    console.log('Body:' + JSON.stringify(params))
     console.log('email:' + email)
     console.log('password:' + password)
     console.log('rut:' + rut)
 
-    User.findOne({ rut: rut.trim() }, (err, user) => {
+    User.findOne({ rut: rut }, (err, user) => {
         if (err) {
             res.status(500).send({ message: 'Error en la peticion' })
         } else {
