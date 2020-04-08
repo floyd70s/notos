@@ -260,13 +260,13 @@ function getUserByRut(req, res) {
                             }
                         } else {
                             console.log('usuario no existe')
-                            res.status(404).send({ message: 'Usuario o Contraseña incorrecta.' })
+                            res.status(204).send({ message: 'Usuario o Contraseña incorrecta.' })
                         }
                     })
 
                 }
                 else {
-                    res.status(404).send({ message: 'El correo no Existe' })
+                    res.status(204).send({ message: 'El correo no Existe' })
                 }
             }//fin de que el rut existe
         }
