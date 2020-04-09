@@ -28,13 +28,13 @@ function saveUser(req, res) {
     user.name = params.name
     user.rut = params.rut
     user.email = params.email
-    user.role = params.role
+    user.role = 'user'//params.role
     user.phone = params.phone
     user.account_type = params.account_type
     user.bank = params.bank
     user.bank_account = params.bank_account
     user.date = now
-    user.status = 'active'
+    user.status = 'pre-active'
 
     if (params.password) {
         //encriptar contraseña
