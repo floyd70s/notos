@@ -227,10 +227,8 @@ function getUserByRut(req, res) {
     var email = params.email
     var password = params.password
 
-    console.log('-------------------')
+    console.log('-------getUserByRut------------')
     console.log('Body:' + JSON.stringify(params))
-    console.log('email:' + email)
-    console.log('password:' + password)
     console.log('rut:' + rut)
 
     User.findOne({ rut: rut }, (err, user) => {
@@ -238,42 +236,14 @@ function getUserByRut(req, res) {
             res.status(500).send({ message: 'Error en la peticion' })
         } else {
             if (!user) {
-                res.status(404).send({ message: 'El rut no Existe' })
+                res.status(205).send({ message: 'El rut no Existe' })
             } else {
-                //comprobar usuario:
-                console.log('user.mail:'+user.email)
-                if (user.email == email) {
-                    //si el email es correcto
-                    //comprobar contraseña
-                    console.log('email validado')
-                    bcrypt.compare(password, user.password, function (err, check) {
-                        if (check) {
-                            //devolver datos usuario 
-                            //console.log(params.gethash)
-                            if (params.gethash) {
-                                //devolver token
-                                console.log('crea token')
-                                res.status(200).send({token: jwt.createToken(user)})
-                            } else {
-                                console.log('devuelve usuario')
-                                res.status(200).send({ user })
-                            }
-                        } else {
-                            console.log('usuario no existe')
-                            res.status(204).send({ message: 'Usuario o Contraseña incorrecta.' })
-                        }
-                    })
-
-                }
-                else {
-                    res.status(204).send({ message: 'El correo no Existe' })
-                }
-            }//fin de que el rut existe
+                console.log('devuelve usuario')
+                res.status(200).send({ user })
+            }
         }
-    })
+        })
 }
-
-
 
 module.exports = {
     pruebas,
