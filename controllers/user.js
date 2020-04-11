@@ -19,8 +19,10 @@ function pruebas(req, res) {
  * @description: funcion de registro de usuarios 
  */
 function saveUser(req, res) {
-
-    console.log('inicio de registro de usuario')
+    
+    console.clear()
+    console.log('inicio de registro de usuario - saveUser')
+    console.log(JSON.stringify(req.body))
     var user = new User()
     var params = req.body
     let now = new Date();
@@ -36,12 +38,14 @@ function saveUser(req, res) {
     user.date = now
     user.status = 'pre-active'
 
-    if (params.password) {
+    const newPassword = Math.floor(100000 + Math.random() * 900000)
+    console.log(newPassword)
+    if (newPassword) {
         //encriptar contraseña
-        bcrypt.hash(params.password, null, null, function (err, hash) {
+        bcrypt.hash(newPassword, null, null, function (err, hash) {
             user.password = hash;
 
-            console.clear()
+            console.log('------ saveUser ------')
             console.log(user.name)
             console.log(user.rut)
             console.log(user.email)
@@ -64,11 +68,14 @@ function saveUser(req, res) {
                 //guardar usuario
                 user.save((err, userStored) => {
                     if (err) {
+                        console.log('error 500: '+ err.message)
                         res.status(500).send({ message: err.message })
                     } else {
                         if (!userStored) {
+                            console.log('error 404: No se ha registrado el usuario')
                             res.status(404).send({ message: 'No se ha registrado el usuario' })
                         } else {
+                            console.log('200 usuario registrado.')
                             res.status(200).send({ user: userStored })
                         }
                     }
