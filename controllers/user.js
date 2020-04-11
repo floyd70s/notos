@@ -4,6 +4,8 @@ var path = require('path')
 var User = require('../models/user')
 var bcrypt = require('bcrypt-nodejs')
 var jwt = require('../services/jwt')
+//Requerimos el paquete
+var nodemailer = require('nodemailer');
 
 
 function pruebas(req, res) {
@@ -19,7 +21,6 @@ function pruebas(req, res) {
  * @description: funcion de registro de usuarios 
  */
 function saveUser(req, res) {
-    
     console.clear()
     console.log('inicio de registro de usuario - saveUser')
     console.log(JSON.stringify(req.body))
@@ -39,7 +40,7 @@ function saveUser(req, res) {
     user.status = 'pre-active'
 
     const newPassword = Math.floor(100000 + Math.random() * 900000)
-    console.log(newPassword)
+    console.log('new pass:'+newPassword)
     if (newPassword) {
         //encriptar contraseña
         bcrypt.hash(newPassword, null, null, function (err, hash) {
@@ -68,7 +69,7 @@ function saveUser(req, res) {
                 //guardar usuario
                 user.save((err, userStored) => {
                     if (err) {
-                        console.log('error 500: '+ err.message)
+                        console.log('error 500: ' + err.message)
                         res.status(500).send({ message: err.message })
                     } else {
                         if (!userStored) {
@@ -76,6 +77,7 @@ function saveUser(req, res) {
                             res.status(404).send({ message: 'No se ha registrado el usuario' })
                         } else {
                             console.log('200 usuario registrado.')
+                            sendEmail(user,newPassword)
                             res.status(200).send({ user: userStored })
                         }
                     }
@@ -87,7 +89,6 @@ function saveUser(req, res) {
         })
     }
 }
-
 
 /**
  * @author CPerez
@@ -131,8 +132,6 @@ function loginUser(req, res) {
         }
     })
 }
-
-
 
 /**
  * @author CPerez
@@ -249,8 +248,40 @@ function getUserByRut(req, res) {
                 res.status(200).send({ user })
             }
         }
-        })
+    })
 }
+
+function sendEmail(user,newPassword) {
+    console.log('--------inicio de envio de correo - sendEmail: ')
+    console.log(user.email)
+    //Creamos el objeto de transporte
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'contacto.notos@gmail.com',
+            pass: 'Galloviejo1'
+        }
+    });
+
+    var mensaje = "Muchas gracias " + user.name +" por registrarte en notos, tu codigo de seguridad para activar tu cuenta es:"+newPassword;
+
+    var mailOptions = {
+        from: 'contacto.notos@gmail.com',
+        to: user.email,
+        subject: 'Registro nuevo usuario',
+        text: mensaje
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email enviado: ' + info.response);
+        }
+    });
+}
+
+
 
 module.exports = {
     pruebas,
