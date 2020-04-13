@@ -40,7 +40,7 @@ function saveUser(req, res) {
     user.status = 'pre-active'
 
     const newPassword = Math.floor(100000 + Math.random() * 900000)
-    console.log('new pass:'+newPassword)
+    console.log('new pass:' + newPassword)
     if (newPassword) {
         //encriptar contraseña
         bcrypt.hash(newPassword, null, null, function (err, hash) {
@@ -77,7 +77,7 @@ function saveUser(req, res) {
                             res.status(404).send({ message: 'No se ha registrado el usuario' })
                         } else {
                             console.log('200 usuario registrado.')
-                            sendEmail(user,newPassword)
+                            sendEmail(user, newPassword)
                             res.status(200).send({ user: userStored })
                         }
                     }
@@ -251,7 +251,7 @@ function getUserByRut(req, res) {
     })
 }
 
-function sendEmail(user,newPassword) {
+function sendEmail(user, newPassword) {
     console.log('--------inicio de envio de correo - sendEmail: ')
     console.log(user.email)
     //Creamos el objeto de transporte
@@ -262,14 +262,15 @@ function sendEmail(user,newPassword) {
             pass: 'Galloviejo1'
         }
     });
-
-    var mensaje = "Muchas gracias " + user.name +" por registrarte en notos, tu codigo de seguridad para activar tu cuenta es:"+newPassword;
-
+    var mensaje = "Muchas gracias " + user.name + " por registrarte en notos, tu codigo de seguridad para activar tu cuenta es:" + newPassword;
+    var template= '../templates/welcome'
+    
     var mailOptions = {
         from: 'contacto.notos@gmail.com',
         to: user.email,
         subject: 'Registro nuevo usuario',
-        text: mensaje
+        text: mensaje,
+        html: template
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -280,6 +281,10 @@ function sendEmail(user,newPassword) {
         }
     });
 }
+
+
+
+
 
 
 
