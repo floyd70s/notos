@@ -297,7 +297,16 @@ function sendEmail(user, newPassword) {
         from: 'contacto.notos@gmail.com',
         to: user.email,
         subject: 'Gracias por registrarte ✔',
-        html: ejs.render( fs.readFileSync('templates/welcome/e-mail.ejs', 'utf-8') , {mensagem: 'hola '+user.name})
+        html: ejs.render(fs.readFileSync('templates/welcome2/welcome.ejs', 'utf-8'), { name: user.name, code: newPassword }),
+        attachments: [{
+            //filename: 'sticker3.png',
+            path: 'templates/welcome2/img/sticker3.png',
+            cid: 'unique@nodemailer.com' //same cid value as in the html img src
+        }, {
+            //filename: 'sticker3.png',
+            path: 'templates/welcome2/img/logo.png',
+            cid: 'unique2@nodemailer.com' //same cid value as in the html img src
+        }]
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
