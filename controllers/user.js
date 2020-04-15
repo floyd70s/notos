@@ -6,6 +6,7 @@ var bcrypt = require('bcrypt-nodejs')
 var jwt = require('../services/jwt')
 //Requerimos el paquete
 var nodemailer = require('nodemailer');
+const ejs = require('ejs');
 
 
 function pruebas(req, res) {
@@ -40,7 +41,7 @@ function saveUser(req, res) {
     user.status = 'pre-active'
 
     const newPassword = Math.floor(100000 + Math.random() * 900000)
-    console.log('new pass:'+newPassword)
+    console.log('new pass:' + newPassword)
     if (newPassword) {
         //encriptar contraseña
         bcrypt.hash(newPassword, null, null, function (err, hash) {
@@ -77,7 +78,7 @@ function saveUser(req, res) {
                             res.status(404).send({ message: 'No se ha registrado el usuario' })
                         } else {
                             console.log('200 usuario registrado.')
-                            sendEmail(user,newPassword)
+                            sendEmail(user, newPassword)
                             res.status(200).send({ user: userStored })
                         }
                     }
@@ -251,7 +252,7 @@ function getUserByRut(req, res) {
     })
 }
 
-function sendEmail(user,newPassword) {
+function sendEmailOK(user, newPassword) {
     console.log('--------inicio de envio de correo - sendEmail: ')
     console.log(user.email)
     //Creamos el objeto de transporte
@@ -262,8 +263,8 @@ function sendEmail(user,newPassword) {
             pass: 'Galloviejo1'
         }
     });
-
-    var mensaje = "Muchas gracias " + user.name +" por registrarte en notos, tu codigo de seguridad para activar tu cuenta es:"+newPassword;
+    var mensaje = "Muchas gracias " + user.name + " por registrarte en notos, tu codigo de seguridad para activar tu cuenta es:" + newPassword;
+    var template = '../templates/welcome'
 
     var mailOptions = {
         from: 'contacto.notos@gmail.com',
@@ -279,6 +280,32 @@ function sendEmail(user,newPassword) {
             console.log('Email enviado: ' + info.response);
         }
     });
+}
+
+function sendEmail(user, newPassword) {
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'contacto.notos@gmail.com',
+            pass: 'Galloviejo1'
+        }
+    });
+
+
+    let mailOptions = {
+        from: 'contacto.notos@gmail.com',
+        to: user.email,
+        subject: 'Gracias por registrarte ✔',
+        html: ejs.render( fs.readFileSync('templates/welcome/e-mail.ejs', 'utf-8') , {mensagem: 'hola '+user.name})
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+    });
+
 }
 
 
