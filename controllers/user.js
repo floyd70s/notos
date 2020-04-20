@@ -252,35 +252,6 @@ function getUserByRut(req, res) {
     })
 }
 
-function sendEmailOK(user, newPassword) {
-    console.log('--------inicio de envio de correo - sendEmail: ')
-    console.log(user.email)
-    //Creamos el objeto de transporte
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'contacto.notos@gmail.com',
-            pass: 'Galloviejo1'
-        }
-    });
-    var mensaje = "Muchas gracias " + user.name + " por registrarte en notos, tu codigo de seguridad para activar tu cuenta es:" + newPassword;
-    var template = '../templates/welcome'
-
-    var mailOptions = {
-        from: 'contacto.notos@gmail.com',
-        to: user.email,
-        subject: 'Registro nuevo usuario',
-        text: mensaje
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email enviado: ' + info.response);
-        }
-    });
-}
 
 function sendEmail(user, newPassword) {
 
@@ -296,16 +267,14 @@ function sendEmail(user, newPassword) {
     let mailOptions = {
         from: 'contacto.notos@gmail.com',
         to: user.email,
-        subject: 'Gracias por registrarte ✔',
+        subject: 'Gracias por registrarte ✔ - codigo de activacion:'+newPassword ,
         html: ejs.render(fs.readFileSync('templates/welcome2/welcome.ejs', 'utf-8'), { name: user.name, code: newPassword }),
         attachments: [{
-            //filename: 'sticker3.png',
             path: 'templates/welcome2/img/sticker3.png',
-            cid: 'unique@nodemailer.com' //same cid value as in the html img src
+            cid: 'unique@nodemailer.com' //el mismo que en el HTML
         }, {
-            //filename: 'sticker3.png',
             path: 'templates/welcome2/img/logo.png',
-            cid: 'unique2@nodemailer.com' //same cid value as in the html img src
+            cid: 'unique2@nodemailer.com' //el mismo que en el HTML
         }]
     };
     transporter.sendMail(mailOptions, (error, info) => {
@@ -316,8 +285,6 @@ function sendEmail(user, newPassword) {
     });
 
 }
-
-
 
 module.exports = {
     pruebas,

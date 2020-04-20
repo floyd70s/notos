@@ -8,7 +8,12 @@ var CampaignSchema= Schema({
     image:String,
     date:Date,
     hashtag:String,
-    validity:Date
+    validity:Date,
+    rut: {type: Schema.ObjectId, ref:'User'}
 })
+
+
+
+
 
 module.exports= mongoose.model('campaign',CampaignSchema)
