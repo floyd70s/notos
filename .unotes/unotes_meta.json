@@ -1,0 +1,63 @@
+{
+  "name": "",
+  "isOrdered": true,
+  "folders": {
+    "assets": {
+      "name": "assets",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "controllers": {
+      "name": "controllers",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "middlewares": {
+      "name": "middlewares",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "models": {
+      "name": "models",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "routes": {
+      "name": "routes",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "services": {
+      "name": "services",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "templates": {
+      "name": "templates",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "uploads": {
+      "name": "uploads",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "Notes": {
+      "name": "Notes",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    }
+  },
+  "files": {
+    "README": 0
+  }
+}
