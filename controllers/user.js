@@ -282,6 +282,15 @@ function sendEmailOK(user, newPassword) {
     });
 }
 
+function generateQR(msg, QRName) {
+    //Salida a fichero .svg en la ruta códigos
+    var qr = require('qr-image');
+    var fs = require('fs');
+    var code = qr.image(msg, { type: 'svg' });
+    var output = fs.createWriteStream('codes/' + QRName)
+    code.pipe(output);
+}
+
 function sendEmail(user, newPassword) {
 
     let transporter = nodemailer.createTransport({
@@ -301,11 +310,11 @@ function sendEmail(user, newPassword) {
         attachments: [{
             //filename: 'sticker3.png',
             path: 'templates/welcome2/img/sticker3.png',
-            cid: 'unique@nodemailer.com' //same cid value as in the html img src
+            cid: 'unique@notos.cl' //same cid value as in the html img src
         }, {
             //filename: 'sticker3.png',
             path: 'templates/welcome2/img/logo.png',
-            cid: 'unique2@nodemailer.com' //same cid value as in the html img src
+            cid: 'unique2@notos.cl' //same cid value as in the html img src
         }]
     };
     transporter.sendMail(mailOptions, (error, info) => {
