@@ -4,7 +4,6 @@ var path = require('path')
 var User = require('../models/user')
 var bcrypt = require('bcrypt-nodejs')
 var jwt = require('../services/jwt')
-//Requerimos el paquete
 var nodemailer = require('nodemailer');
 const ejs = require('ejs');
 
@@ -272,7 +271,6 @@ function sendEmail(user, newPassword) {
         }
     });
 
-
     let mailOptions = {
         from: 'contacto.notos@gmail.com',
         to: user.email,
@@ -280,18 +278,10 @@ function sendEmail(user, newPassword) {
         html: ejs.render(fs.readFileSync('templates/welcome2/welcome.ejs', 'utf-8'), { name: user.name, code: newPassword }),
         attachments: [{
             path: 'templates/welcome2/img/sticker3.png',
-<<<<<<< HEAD
             cid: 'unique@notos.cl' //same cid value as in the html img src
-=======
-            cid: 'unique@nodemailer.com' //el mismo que en el HTML
->>>>>>> 6ba98264a317d65ff9c0405bce4abcd8ad519122
         }, {
             path: 'templates/welcome2/img/logo.png',
-<<<<<<< HEAD
             cid: 'unique2@notos.cl' //same cid value as in the html img src
-=======
-            cid: 'unique2@nodemailer.com' //el mismo que en el HTML
->>>>>>> 6ba98264a317d65ff9c0405bce4abcd8ad519122
         }]
     };
     transporter.sendMail(mailOptions, (error, info) => {
@@ -311,5 +301,6 @@ module.exports = {
     uploadImage,
     getImageFile,
     getUserByRut,
-    getUsers
+    getUsers,
+    generateQR
 }

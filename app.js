@@ -7,6 +7,7 @@ var app=express();
 
 //cargar rutas
 var user_routes= require('./routes/user')
+var campaign_routes= require('./routes/campaign')
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -23,5 +24,6 @@ app.use((req,res,next)=>{
 
 //rutas base
 app.use('/api',user_routes);
+app.use('/api',campaign_routes);
 
 module.exports=app;

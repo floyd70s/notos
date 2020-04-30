@@ -9,11 +9,7 @@ var CampaignSchema= Schema({
     date:Date,
     hashtag:String,
     validity:Date,
-    rut: {type: Schema.ObjectId, ref:'User'}
+    user: {type: Schema.ObjectId, ref:'User'}
 })
-
-
-
-
 
 module.exports= mongoose.model('campaign',CampaignSchema)
