@@ -16,5 +16,6 @@ var md_upload=multipart({uploadDir:'./uploads/users'})
 api.post('/saveCampaign',CampaignController.saveCampaign)
 api.post('/upload-Image-campaign/:id',[md_auth.ensureAuth,md_upload],CampaignController.uploadImage)
 api.get('/get-Image-campaign/:imageFile',CampaignController.getImageFile)
+api.get('/get-campaigns',CampaignController.getCampaigns) 
 module.exports=api
  

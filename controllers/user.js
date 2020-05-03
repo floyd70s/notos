@@ -13,7 +13,6 @@ function pruebas(req, res) {
         message: 'prueba de controlador'
     })
 }
-
 /**
  * @author CPerez
  * @param {*} req 
@@ -89,7 +88,6 @@ function saveUser(req, res) {
         })
     }
 }
-
 /**
  * @author CPerez
  * @param {*} req 
@@ -132,7 +130,6 @@ function loginUser(req, res) {
         }
     })
 }
-
 /**
  * @author CPerez
  * @param {*} req 
@@ -203,8 +200,6 @@ function getImageFile(req, res) {
         }
     })
 }
-
-
 function getUsers(req, res) {
     var rut = req.params.rut
     console.log('busqueda de usuario por rut: ' + rut)
@@ -250,8 +245,6 @@ function getUserByRut(req, res) {
         }
     })
 }
-
-
 function generateQR(msg, QRName) {
     //Salida a fichero .svg en la ruta códigos
     var qr = require('qr-image');
@@ -260,7 +253,6 @@ function generateQR(msg, QRName) {
     var output = fs.createWriteStream('codes/' + QRName)
     code.pipe(output);
 }
-
 function sendEmail(user, newPassword) {
 
     let transporter = nodemailer.createTransport({

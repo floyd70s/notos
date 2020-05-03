@@ -2,6 +2,7 @@
 var fs = require('fs')
 var path = require('path')
 var Campaign = require('../models/campaign')
+var User = require('../models/user')
 var bcrypt = require('bcrypt-nodejs')
 var jwt = require('../services/jwt')
 var nodemailer = require('nodemailer');
@@ -106,9 +107,27 @@ function getCampaignByRut(req, res) {
     })
 }
 
+function getCampaigns(req, res) {
+    Campaign.find({}, (err, campaign) => {
+        if (err) {
+            res.status(500).send({ message: err })
+        } else {
+            if (!User) {
+                res.status(400).send({ message: 'el usuario no existe' })
+            } else {
+                res.status(200).send( campaign)
+            }
+        }
+    })
+}
+
+
+
 module.exports = {
     uploadImage,
     getImageFile,
     saveCampaign,
-    getCampaignByRut
+    getCampaignByRut,
+    saveCampaign,
+    getCampaigns
 }
