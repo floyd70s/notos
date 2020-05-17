@@ -8,35 +8,45 @@ var jwt = require('../services/jwt')
 var nodemailer = require('nodemailer');
 const ejs = require('ejs');
 
-
-
+/**
+ * @author CPerez
+ * @param {*} req 
+ * @param {*} res
+ * @description funcion que permite subir una imagen al usuario 
+ */
 function uploadImage(req, res) {
-    var artistId = req.params.id
-    var file_name = 'no subido.'
-
-    if (req.files) {
+    console.log('-------- uploadImage --------')
+    console.log('request'+req)
+    var campaignId = req.params.id
+    var file_name = 'No subido...'
+     console.log('campaignId:'+ campaignId)
+     console.log(req.files)
+    
+     if (req.files) {
         var file_path = req.files.image.path
-        var file_split = file_path.split('/')
-        var file_name = file_split[2]
-        var ext_file = file_name.split('.')
-        var file_ext = ext_file[1]
+        var file_split= file_path.split('/')
+        var file_name= file_split[2]
+        var ext_file= file_name.split('.')
+        var file_ext= ext_file[1]
 
-        console.log('campaignId: ' + artistId)
-        console.log('file_name: ' + file_name)
-
-        if (file_ext == 'jpg' || file_ext == 'gif' || file_ext == 'png') {
-            Artist.findByIdAndUpdate(artistId, { image: file_name }, (err, artistUpdated) => {
-                if (!artistUpdated) {
+        if (file_ext=='jpg'||file_ext=='gif'||file_ext=='png' || file_ext=='jpeg'){
+            Campaign.findByIdAndUpdate(campaignId,{image:file_name}, (err,campaignUpdated)=>{
+                if (!campaignUpdated) {
                     res.status(404).send({ message: 'No se ha podido actualizar la imagen' })
-                } else {
-                    res.status(200).send({ artist: artistUpdated })
+                    console.log('404 La campaña no ha sido guardado')
+                }else {
+                    res.status(200).send({ Campaign: campaignUpdated })
+                    console.log('200 -ok')
                 }
             })
-        } else {
-            res.status(200).send({ message: 'La extension no es correcta' })
-        }
+        }else{
+            res.status(404).send({ message: 'La extension no es correcta' })
+            console.log('404 La extension no es correcta')
+        } 
     } else {
-        res.status(200).send({ message: 'No se ha subido ninguna imagen' })
+        res.status(404).send({ message: 'No se ha subido ninguna imagen' })
+        console.log('404 No se ha subido ninguna imagen')
+        
     }
 }
 function getImageFile(req, res) {
@@ -73,9 +83,11 @@ function saveCampaign(req, res) {
             console.log(err.message)
         } else {
             if (!campaignStored) {
+                console.log('404 La campaña no ha sido guardado')
                 res.status(404).send({ message: 'La campaña no ha sido guardado' })
             } else {
                 res.status(200).send({ campaign: campaignStored })
+                console.log('200 ok')
             }
         }
 
