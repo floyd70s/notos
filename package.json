@@ -25,7 +25,7 @@
     "core-util-is": "^1.0.2",
     "ejs": "^3.0.2",
     "email-templates": "^2.7.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fs": "0.0.1-security",
     "handlebars": "^4.7.6",
     "jwt-decode": "^2.2.0",
